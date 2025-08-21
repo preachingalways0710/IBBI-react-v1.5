@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Language, TranslationSet } from '../types';
 
@@ -87,11 +86,12 @@ const Header: React.FC<HeaderProps> = ({ language, setLanguage, t }) => {
               </button>
             </div>
             <div className="flex items-center space-x-4">
-               <button onClick={() => setLanguage('en')} className={`transition-opacity ${language !== 'en' ? 'opacity-50 hover:opacity-100' : ''}`} aria-label="Switch to English" title={t.tooltipSwitchToEnglish}>
-                  <USFlag className="h-6 w-auto rounded-sm shadow-md border border-slate-600" />
-               </button>
+               {/* Show Brazil flag first, then US flag */}
                <button onClick={() => setLanguage('pt')} className={`transition-opacity ${language !== 'pt' ? 'opacity-50 hover:opacity-100' : ''}`} aria-label="Mudar para Português" title={t.tooltipSwitchToPortuguese}>
                   <BrazilFlag className="h-6 w-auto rounded-sm shadow-md border border-slate-600" />
+               </button>
+               <button onClick={() => setLanguage('en')} className={`transition-opacity ${language !== 'en' ? 'opacity-50 hover:opacity-100' : ''}`} aria-label="Switch to English" title={t.tooltipSwitchToEnglish}>
+                  <USFlag className="h-6 w-auto rounded-sm shadow-md border border-slate-600" />
                </button>
             </div>
           </div>

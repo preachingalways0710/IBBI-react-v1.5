@@ -31,7 +31,7 @@ function App() {
   const apiKey = process.env.REACT_APP_GOOGLE_API_KEY;
 
   // --- All other state declarations ---
-  const [language, setLanguage] = useState<Language>('en');
+const [language, setLanguage] = useState<Language>('pt');
   const [version, setVersion] = useState<BibleVersion>(BibleVersion.ACF2007);
   const [book, setBook] = useState<string>(BIBLE_BOOKS[0].name);
   const [chapter, setChapter] = useState<number>(1);
@@ -73,12 +73,12 @@ function App() {
   const [isThemesModalOpen, setIsThemesModalOpen] = useState<boolean>(false);
   const [commonThemes, setCommonThemes] = useState<{ en: CommonThemeItem[] | null, pt: CommonThemeItem[] | null }>({ en: null, pt: null });
   const [themesLoading, setThemesLoading] = useState<Set<Language>>(new Set());
-  const [themesDisplayLanguage, setThemesDisplayLanguage] = useState<Language>('en');
+  const [themesDisplayLanguage, setThemesDisplayLanguage] = useState<Language>('pt');
 
   const [isSummaryModalOpen, setIsSummaryModalOpen] = useState<boolean>(false);
   const [chapterSummary, setChapterSummary] = useState<{ en: ChapterSummary | null, pt: ChapterSummary | null }>({ en: null, pt: null });
   const [summaryLoading, setSummaryLoading] = useState<Set<Language>>(new Set());
-  const [summaryDisplayLanguage, setSummaryDisplayLanguage] = useState<Language>('en');
+  const [summaryDisplayLanguage, setSummaryDisplayLanguage] = useState<Language>('pt');
 
   const [wordDefinitionState, setWordDefinitionState] = useState<WordDefinitionState>({
     isOpen: false,
@@ -86,7 +86,7 @@ function App() {
     verseRef: null,
     definition: { en: null, pt: null },
     loading: new Set(),
-    displayLanguage: 'en',
+    displayLanguage: 'pt',
     wasCancelled: false,
   });
 
@@ -303,7 +303,7 @@ function App() {
     
     if (isTogglingToTranslated && translatedChatHistory.length !== chatHistory.length) {
       setQaTranslationLoading(true);
-      const targetLang = language === 'en' ? 'pt' : 'en';
+      const targetLang = language === 'pt' ? 'en' : 'pt';
       try {
         const historyToTranslate = chatHistory.filter(turn => !turn.answerLoading);
         const translationPromises = historyToTranslate.map(turn => 
@@ -406,8 +406,8 @@ function App() {
 
   const handleToggleVerse = async (verseNumber: number) => {
     generationController.current.isCancelled = false;
-    const commentaryLang = translateCommentaryToggle ? (language === 'en' ? 'pt' : 'en') : language;
-    
+    const commentaryLang = translateCommentaryToggle ? (language === 'pt' ? 'en' : 'pt') : language;
+
     let verse = chapterContent.find(v => v.number === verseNumber);
     if (!verse) return;
     
@@ -492,7 +492,7 @@ function App() {
     }
 
     if (newMode === 'commentary' || newMode === 'simplified') {
-      const commentaryLang = translateCommentaryToggle ? (language === 'en' ? 'pt' : 'en') : language;
+      const commentaryLang = translateCommentaryToggle ? (language === 'pt' ? 'en' : 'pt') : language;
       
       let versesNeedFetching = false;
       if (newMode === 'commentary') {
@@ -564,7 +564,7 @@ function App() {
 
   const handleToggleCommentaryTranslation = async () => {
     const isTogglingToTranslated = !translateCommentaryToggle;
-    const targetLang = isTogglingToTranslated ? (language === 'en' ? 'pt' : 'en') : language;
+    const targetLang = isTogglingToTranslated ? (language === 'pt' ? 'en' : 'pt') : language;
     const isCommentaryExpanded = viewMode === 'commentary' || viewMode === 'simplified';
 
     const versesNeedingTranslation = chapterContent.filter(v => {
@@ -636,7 +636,7 @@ function App() {
 
   const handleShowDifference = async (verseNumber: number) => {
     generationController.current.isCancelled = false;
-    const commentaryLang = translateCommentaryToggle ? (language === 'en' ? 'pt' : 'en') : language;
+    const commentaryLang = translateCommentaryToggle ? (language === 'pt' ? 'en' : 'pt') : language;
     const verse = chapterContent.find(v => v.number === verseNumber);
     if (!verse) return;
     
@@ -682,7 +682,7 @@ function App() {
 
   const handleSimplifyVerse = async (verseNumber: number, action: 'simplify' | 'revert') => {
     generationController.current.isCancelled = false;
-    const commentaryLang = translateCommentaryToggle ? (language === 'en' ? 'pt' : 'en') : language;
+    const commentaryLang = translateCommentaryToggle ? (language === 'pt' ? 'en' : 'pt') : language;
     const verse = chapterContent.find(v => v.number === verseNumber);
     if (!verse) return;
 
@@ -772,7 +772,7 @@ function App() {
 
   const handleToggleCrossReferences = async (verseNumber: number) => {
     generationController.current.isCancelled = false;
-    const commentaryLang = translateCommentaryToggle ? (language === 'en' ? 'pt' : 'en') : language;
+    const commentaryLang = translateCommentaryToggle ? (language === 'pt' ? 'en' : 'pt') : language;
     
     const verse = chapterContent.find(v => v.number === verseNumber);
     if (!verse) return;
@@ -893,7 +893,7 @@ function App() {
   };
 
   const handleTranslateThemes = async () => {
-    const targetLang = themesDisplayLanguage === 'en' ? 'pt' : 'en';
+    const targetLang = themesDisplayLanguage === 'pt' ? 'en' : 'pt';
     setThemesDisplayLanguage(targetLang);
 
     if (!commonThemes[targetLang] && !themesLoading.has(targetLang)) {
@@ -943,7 +943,7 @@ function App() {
   };
 
   const handleTranslateSummary = async () => {
-    const targetLang = summaryDisplayLanguage === 'en' ? 'pt' : 'en';
+    const targetLang = summaryDisplayLanguage === 'pt' ? 'en' : 'pt';
     setSummaryDisplayLanguage(targetLang);
 
     if (!chapterSummary[targetLang] && !summaryLoading.has(targetLang)) {
@@ -1020,7 +1020,7 @@ function App() {
     const { word, verseRef, definition, displayLanguage } = wordDefinitionState;
     if (!word || !verseRef) return;
   
-    const targetLang = displayLanguage === 'en' ? 'pt' : 'en';
+    const targetLang = displayLanguage === 'pt' ? 'en' : 'pt';
     setWordDefinitionState(prev => ({ ...prev, displayLanguage: targetLang }));
   
     if (!definition[targetLang]) {
