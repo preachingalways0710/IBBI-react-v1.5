@@ -14,7 +14,16 @@ interface ModeSwitcherProps {
 }
 
 // Icons
-const StudyIcon = ({ className = "w-6 h-6" }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v15H6.5A2.5 2.5 0 0 1 4 14.5V4.5A2.5 2.5 0 0 1 6.5 2z"/></svg>;
+const StudyIcon = ({ className = "w-6 h-6" }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
+    <rect x="3" y="4" width="18" height="16" rx="2" fill="#fff" stroke="#222" strokeWidth="2"/>
+    <path d="M7 4v16M17 4v16" stroke="#222" strokeWidth="1.5"/>
+    <path d="M3 8h18" stroke="#222" strokeWidth="1"/>
+    <rect x="7" y="7" width="10" height="2" rx="0.5" fill="#e2c97b"/>
+    <rect x="7" y="11" width="10" height="1.5" rx="0.5" fill="#e2c97b"/>
+    <rect x="7" y="14" width="10" height="1.5" rx="0.5" fill="#e2c97b"/>
+  </svg>
+);
 const SermonIcon = ({ className = "w-6 h-6" }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>;
 
 const ChatIcon = ({ className = "w-5 h-5" }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>;
