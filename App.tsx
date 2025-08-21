@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { BibleVersion, Verse, Language, OutlineItem, CommonThemeItem, ChatTurn, ChapterSummary, WordDefinitionState, ChapterViewMode, StructuredCommentary, CrossRefPopupState, CrossReferenceItem, TranslationSet, SermonDataType, PointContent, ScriptureContent, SermonBodyItem, SermonType } from './types';
 import { BIBLE_BOOKS, translations } from './constants';
@@ -28,6 +27,10 @@ const CloseIcon: React.FC<{ className?: string }> = ({ className }) => (
 );
 
 function App() {
+  // Read the Google API key from your .env.local
+  const apiKey = process.env.REACT_APP_GOOGLE_API_KEY;
+
+  // --- All other state declarations ---
   const [language, setLanguage] = useState<Language>('en');
   const [version, setVersion] = useState<BibleVersion>(BibleVersion.ACF2007);
   const [book, setBook] = useState<string>(BIBLE_BOOKS[0].name);
@@ -46,9 +49,7 @@ function App() {
   const [mode, setMode] = useState<AppMode>('study');
   const [activeSermonPanel, setActiveSermonPanel] = useState<ActiveSermonPanel>(null);
   const [lastInteractedSermonPanel, setLastInteractedSermonPanel] = useState<'editor' | 'panel'>('editor');
-  
   const [readerMinimizedBeforeSermonMode, setReaderMinimizedBeforeSermonMode] = useState(isReaderMinimized);
-
 
   const [chapterContent, setChapterContent] = useState<Verse[]>([]);
   const [chapterLoading, setChapterLoading] = useState<boolean>(true);
