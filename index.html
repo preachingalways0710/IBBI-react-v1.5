@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Biblicist Study Bible</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* For custom scrollbars */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #1e293b; /* slate-800 */
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #475569; /* slate-600 */
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #64748b; /* slate-500 */
+      }
+      @keyframes pulse-border {
+        0% {
+          box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.7); /* amber-400 */
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(251, 191, 36, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(251, 191, 36, 0);
+        }
+      }
+      .animate-pulse-border {
+        animation: pulse-border 2s ease-out;
+      }
+      @keyframes fade-in-down {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-fade-in-down {
+        animation: fade-in-down 0.4s ease-out forwards;
+      }
+      @keyframes fade-in-up {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-fade-in-up {
+        animation: fade-in-up 0.3s ease-out forwards;
+      }
+    </style>
+
+<link rel="stylesheet" href="/index.css">
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^18.2.0/",
+    "react": "https://esm.sh/react@^18.2.0",
+    "react-dom/": "https://esm.sh/react-dom@^18.2.0/",
+    "react-dom": "https://esm.sh/react-dom@^18.2.0",
+    "@google/genai": "https://esm.sh/@google/genai@^1.12.0",
+    "jspdf": "https://esm.sh/jspdf@^2.5.1",
+    "html2canvas": "https://esm.sh/html2canvas@^1.4.1"
+  }
+}
+</script>
+  <script type="module" crossorigin src="/assets/index-CopEvM7r.js"></script>
+</head>
+  <body class="bg-slate-900 text-slate-300 overflow-x-hidden">
+    <div id="root"></div>
+    <div id="modal-root"></div>
+  </body>
+</html>
