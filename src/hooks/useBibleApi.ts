@@ -8,7 +8,7 @@ const BIBLE_API_URL = 'https://bible-api.com'; // Correct API for ACF 2007 (TBS)
 export const BIBLE_VERSIONS = {
   KJV: 'King James Version',
   ACF2011: 'Almeida Corrigida Fiel (2011)',
-  ACF2007: 'Almeida Corrigida Fiel (2007)',
+  ACF2007: 'Almeida Corrigida Fiel (TBS)',  // Updated to reflect actual version
 };
 
 export interface Verse {

@@ -2,6 +2,7 @@ import React from 'react';
 import { BibleVersion, Language } from '../types';
 import { BIBLE_BOOKS } from '../constants';
 import { TranslationSet } from '../types';
+import { BIBLE_VERSIONS } from '../src/hooks/useBibleApi';
 
 interface BibleSelectorProps {
   version: BibleVersion;
@@ -43,9 +44,9 @@ const BibleSelector: React.FC<BibleSelectorProps> = ({ version, setVersion, book
                 <div>
                     <label htmlFor="version-floating" className="block text-sm font-medium text-slate-400 mb-1">{t.version}</label>
                     <select id="version-floating" value={version} onChange={(e) => setVersion(e.target.value as BibleVersion)} className={selectStyles}>
-                        <option value={BibleVersion.KJV}>{t.kjv1769}</option>
-                        <option value={BibleVersion.ACF2011}>{t.acf2011}</option>
-                        <option value={BibleVersion.ACF2007}>{t.acf2007}</option>
+                        <option value={BibleVersion.KJV}>{BIBLE_VERSIONS.KJV}</option>
+                        <option value={BibleVersion.ACF2011}>{BIBLE_VERSIONS.ACF2011}</option>
+                        <option value={BibleVersion.ACF2007}>{BIBLE_VERSIONS.ACF2007}</option>
                     </select>
                 </div>
                 <div className="flex gap-4">
@@ -96,9 +97,9 @@ const BibleSelector: React.FC<BibleSelectorProps> = ({ version, setVersion, book
                   <div>
                       <label htmlFor="version" className="block text-sm font-medium text-slate-400 mb-1">{t.version}</label>
                       <select id="version" value={version} onChange={(e) => setVersion(e.target.value as BibleVersion)} className={selectStyles}>
-                          <option value={BibleVersion.KJV}>{t.kjv1769}</option>
-                          <option value={BibleVersion.ACF2011}>{t.acf2011}</option>
-                          <option value={BibleVersion.ACF2007}>{t.acf2007}</option>
+                          <option value={BibleVersion.KJV}>{BIBLE_VERSIONS.KJV}</option>
+                          <option value={BibleVersion.ACF2011}>{BIBLE_VERSIONS.ACF2011}</option>
+                          <option value={BibleVersion.ACF2007}>{BIBLE_VERSIONS.ACF2007}</option>
                       </select>
                   </div>
                   <div className="flex gap-4">
