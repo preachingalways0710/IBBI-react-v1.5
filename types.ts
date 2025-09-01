@@ -1,6 +1,3 @@
-
-
-
 export interface WordDefinition {
   modern_definition: string;
   archaic_usage_note?: string;
@@ -49,6 +46,7 @@ export enum BibleVersion {
 
 export interface Book {
   name: string;
+  abbrev: string;
   chapters: number;
   pt_name: string;
   pt_abbrev: string;
