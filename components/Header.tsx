@@ -104,7 +104,7 @@ const Header: React.FC<HeaderProps> = ({ language, setLanguage, t }) => {
           onClick={() => setIsAboutModalOpen(false)}
         >
           <div 
-            className="bg-slate-800 rounded-lg shadow-2xl w-full max-w-lg border border-slate-700"
+            className="bg-slate-800 rounded-lg shadow-2xl w-full max-w-lg border border-slate-700 flex flex-col max-h-[90vh]"
             onClick={e => e.stopPropagation()}
           >
             <header className="flex justify-between items-center p-4 border-b border-slate-700">
@@ -117,7 +117,7 @@ const Header: React.FC<HeaderProps> = ({ language, setLanguage, t }) => {
                 <CloseIcon className="w-6 h-6" />
               </button>
             </header>
-            <div className="p-6">
+            <div className="p-6 overflow-y-auto">
               <p className="text-slate-300">
                 {t.aboutContentPart1}
                 <a href="https://meuibbi.com" target="_blank" rel="noopener noreferrer" className="text-sky-400 hover:underline">
