@@ -94,7 +94,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   
   const mainContainerClass = isFloating 
     ? 'flex flex-col overflow-hidden h-full' 
-    : `bg-slate-800 rounded-lg shadow-md flex flex-col transition-all duration-500 ease-in-out ${isMinimized ? 'max-h-16 overflow-hidden' : 'max-h-[45vh]'}`;
+    : `bg-slate-800 rounded-lg shadow-md flex flex-col transition-all duration-500 ease-in-out ${isMinimized ? 'max-h-16 overflow-hidden' : 'max-h-[75vh] md:max-h-[45vh]'}`;
 
 
   return (
