@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Language, TranslationSet } from '../types';
 import { useFontSize } from '../contexts/FontSizeContext';
+import ReactDOM from 'react-dom';
 
 interface HeaderProps {
   language: Language;
@@ -8,32 +9,64 @@ interface HeaderProps {
   t: TranslationSet;
 }
 
-const FontSizeController: React.FC<{ t: TranslationSet }> = ({ t }) => {
-  const { increaseFontSize, decreaseFontSize } = useFontSize();
+const FontSizeButton: React.FC<{ t: TranslationSet }> = ({ t }) => {
+  const { currentFontSize, setFontSize } = useFontSize();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const fontSizes = [12, 14, 16, 18, 20, 22, 24]; // Seven sizes: three smaller, default, three larger
+
+  const handleFontSizeSelect = (size: number) => {
+    setFontSize(size);
+    setIsModalOpen(false);
+  };
+
+  const modalRoot = document.getElementById('modal-root');
+
+  const fontSizeModal = isModalOpen && modalRoot ? ReactDOM.createPortal(
+    <div 
+      className="fixed inset-0 bg-black bg-opacity-70 z-50 flex justify-center items-center p-4 animate-fade-in"
+      onClick={() => setIsModalOpen(false)}
+    >
+      <div 
+        className="bg-slate-800 rounded-lg shadow-2xl w-32 p-4 border border-slate-700 flex flex-col items-center space-y-2"
+        onClick={e => e.stopPropagation()}
+      >
+        <h3 className="text-sm font-semibold text-amber-400 mb-2">{t.fontSize}</h3>
+        {fontSizes.map(size => (
+          <button
+            key={size}
+            onClick={() => handleFontSizeSelect(size)}
+            className={`w-full py-2 px-4 rounded-md transition-colors ${
+              currentFontSize === size
+                ? 'bg-amber-500 text-slate-900'
+                : 'text-amber-400 hover:bg-slate-700'
+            }`}
+            style={{ fontSize: `${size}px` }}
+            title={`${size}px`}
+          >
+            A
+          </button>
+        ))}
+      </div>
+    </div>,
+    modalRoot
+  ) : null;
+
   return (
-    <div className="flex items-center border border-slate-600 rounded-md">
+    <>
       <button
-        onClick={decreaseFontSize}
-        className="px-2 py-1 text-slate-300 hover:bg-slate-700 rounded-l-md transition-colors"
-        title={t.decreaseFontSize}
-        aria-label={t.decreaseFontSize}
+        onClick={() => setIsModalOpen(true)}
+        className="px-2 py-1 text-slate-300 hover:bg-slate-700 rounded-md transition-colors flex items-center space-x-2"
+        title={t.fontSize}
+        aria-label={t.fontSize}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
-        </svg>
+        <span className="flex items-baseline space-x-1">
+          <span className="text-xs text-slate-400">A</span>
+          <span className="text-sm text-slate-400">A</span>
+        </span>
       </button>
-      <span className="px-2 text-xs font-semibold text-slate-400 border-x border-slate-600" title={t.fontSize}>A</span>
-      <button
-        onClick={increaseFontSize}
-        className="px-2 py-1 text-slate-300 hover:bg-slate-700 rounded-r-md transition-colors"
-        title={t.increaseFontSize}
-        aria-label={t.increaseFontSize}
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-        </svg>
-      </button>
-    </div>
+      {fontSizeModal}
+    </>
   );
 };
 
@@ -116,7 +149,7 @@ const Header: React.FC<HeaderProps> = ({ language, setLanguage, t }) => {
               </button>
             </div>
             <div className="flex items-center space-x-4">
-               <FontSizeController t={t} />
+               <FontSizeButton t={t} />
                {/* Show Brazil flag first, then US flag */}
                <button onClick={() => setLanguage('pt')} className={`transition-opacity ${language !== 'pt' ? 'opacity-50 hover:opacity-100' : ''}`} aria-label="Mudar para Português" title={t.tooltipSwitchToPortuguese}>
                   <BrazilFlag className="h-6 w-auto rounded-sm shadow-md border border-slate-600" />

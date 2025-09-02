@@ -5,6 +5,8 @@ const MAX_FONT_SIZE = 28;
 const DEFAULT_FONT_SIZE = 16;
 
 interface FontSizeContextType {
+  currentFontSize: number;
+  setFontSize: (size: number) => void;
   increaseFontSize: () => void;
   decreaseFontSize: () => void;
 }
@@ -32,8 +34,12 @@ export const FontSizeProvider: React.FC<{ children: ReactNode }> = ({ children }
     setFontSize(prevSize => Math.max(prevSize - 2, MIN_FONT_SIZE));
   };
 
+  const handleSetFontSize = (size: number) => {
+    setFontSize(Math.max(MIN_FONT_SIZE, Math.min(size, MAX_FONT_SIZE)));
+  };
+
   return (
-    <FontSizeContext.Provider value={{ increaseFontSize, decreaseFontSize }}>
+    <FontSizeContext.Provider value={{ currentFontSize: fontSize, setFontSize: handleSetFontSize, increaseFontSize, decreaseFontSize }}>
       {children}
     </FontSizeContext.Provider>
   );
