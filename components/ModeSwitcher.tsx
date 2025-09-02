@@ -42,7 +42,7 @@ const ModeSwitcher: React.FC<ModeSwitcherProps> = ({ mode, setMode, activePanel,
   };
 
   return (
-    <footer className="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/80 backdrop-blur-sm border-t border-slate-700/50">
+    <footer className="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/80 backdrop-blur-sm border-t border-slate-700/50 lg:hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
         {mode === 'sermon' && (
           <div className="flex items-center space-x-4 py-2 animate-fade-in-up">
