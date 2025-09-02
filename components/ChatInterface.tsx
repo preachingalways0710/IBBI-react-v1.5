@@ -52,6 +52,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 }) => {
   const [question, setQuestion] = useState('');
   const lastMessageRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null); // New ref for the header
+  const contentRef = useRef<HTMLDivElement>(null); // New ref for the scrollable content area
 
   const historyToDisplay = qaTranslated && translatedChatHistory.length === chatHistory.length
     ? translatedChatHistory
@@ -60,8 +62,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const hasContent = chatHistory.length > 0;
 
   useEffect(() => {
-    if ((!isMinimized || isFloating) && lastMessageRef.current) {
-      lastMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Scroll the content area to bring the last message to the top
+    if ((!isMinimized || isFloating) && contentRef.current && lastMessageRef.current && historyToDisplay.length > 0) {
+      const content = contentRef.current;
+      const target = lastMessageRef.current;
+      const contentRect = content.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const scrollTop = content.scrollTop + (targetRect.top - contentRect.top);
+      content.scrollTo({ top: scrollTop, behavior: 'smooth' });
     }
   }, [historyToDisplay.length, isMinimized, isFloating]);
 
@@ -71,6 +79,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     if (question.trim() && !loading) {
       onAskQuestion(question);
       setQuestion('');
+      // Scroll to the header after submission, accounting for the sticky app header
+      if (headerRef.current && !isMinimized && !isFloating) {
+        const rect = headerRef.current.getBoundingClientRect();
+        const appHeaderHeight = 64; // Height of the sticky app header (h-16 = 64px)
+        const offset = 10; // Slight gap below the app header
+        const scrollTop = window.pageYOffset + rect.top - appHeaderHeight - offset;
+        window.scrollTo({ top: scrollTop, behavior: 'smooth' });
+      }
+      // Removed: Internal scroll logic (now handled by useEffect)
     }
   };
 
@@ -101,6 +118,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     <div className={mainContainerClass}>
         {!isFloating && (
           <div 
+            ref={headerRef} // Attach the ref to the header
             className={`p-4 border-b border-slate-700 flex justify-between items-center flex-shrink-0 ${isMinimized ? 'border-b-transparent cursor-pointer h-full' : ''}`}
             onClick={isMinimized ? onToggleMinimize : undefined}
           >
@@ -140,7 +158,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       
       {(!isMinimized || isFloating) && (
         <>
-          <div className={`p-6 flex-grow overflow-y-auto`}>
+          <div 
+            ref={contentRef} // Attach the ref to the scrollable content area
+            className={`p-6 flex-grow overflow-y-auto`}
+          >
             {hasContent ? (
               <div className="space-y-6">
                 {historyToDisplay.map((turn, index) => {
