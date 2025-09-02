@@ -76,7 +76,7 @@ const Header: React.FC<HeaderProps> = ({ language, setLanguage, t }) => {
             <div className="flex items-center space-x-3">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                  <path d="M6.5 2H20v15H6.5A2.5 2.5 0 0 1 4 14.5V4.5A2.5 2.5 0 0 1 6.5 2z"/>
+                  <path d="M17.5 2H4v15h13.5a2.5 2.5 0 0 0 2.5-2.5V4.5A2.5 2.5 0 0 0 17.5 2z"/>
               </svg>
               <h1 className="text-xl font-bold text-slate-100">
                 {t.studyBible}
