@@ -33,6 +33,27 @@ const MaximizeIcon: React.FC<{ className?: string }> = ({ className }) => (
     </svg>
 );
 
+// Update the utility function to remove asterisks around verse references
+const stripMarkdown = (text: string): string => {
+  // Remove bold (**text**)
+  text = text.replace(/\*\*(.*?)\*\*/g, '$1');
+  // Remove italic (*text*)
+  text = text.replace(/\*(.*?)\*/g, '$1');
+  // Remove inline code (`code`)
+  text = text.replace(/`(.*?)`/g, '$1');
+  // Remove links ([text](url))
+  text = text.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1');
+  // Remove headers (# ## ###)
+  text = text.replace(/^#+\s*/gm, '');
+  // Remove emphasis (_text_)
+  text = text.replace(/_(.*?)_/g, '$1');
+  // Remove strikethrough (~~text~~)
+  text = text.replace(/~~(.*?)~~/g, '$1');
+  // Specifically remove asterisks around verse references (e.g., *Genesis 1:1*, *Psalm 1:1*, *Psalms 1:1*, *Gênesis 1:1*, *Salmos 1:1*)
+  text = text.replace(/\*([A-Za-zÀ-ÿ\s]+ \d+:\d+)\*/gi, '$1');
+  // Trim extra whitespace
+  return text.trim();
+};
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ 
   onAskQuestion, 
@@ -183,7 +204,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                          </div>
                       ) : (
                         <div className="prose prose-invert prose-p:text-slate-300 prose-headings:text-slate-100 whitespace-pre-wrap leading-relaxed">
-                          <AnswerRenderer text={turn.answer} onNavigate={onNavigateToReference} />
+                          <AnswerRenderer text={stripMarkdown(turn.answer)} onNavigate={onNavigateToReference} />
                         </div>
                       )}
                     </div>
