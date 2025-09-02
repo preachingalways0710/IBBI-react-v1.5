@@ -15,6 +15,7 @@ import ModeSwitcher from './components/ModeSwitcher';
 import SermonEditor from './components/SermonEditor';
 import SelectionToolbar from './components/SelectionToolbar';
 import { Chat } from '@google/genai';
+import { FontSizeProvider } from './contexts/FontSizeContext';
 
 type AppMode = 'study' | 'sermon';
 type ActiveSermonPanel = 'chat' | 'selector' | 'reader' | null;
@@ -1361,122 +1362,123 @@ const [language, setLanguage] = useState<Language>('pt');
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 flex flex-col">
-      <Header 
-        language={language}
-        setLanguage={setLanguage}
-        t={t}
-      />
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 flex-grow pb-36 lg:pb-8">
-        {/* Desktop Layout */}
-        <div className="hidden lg:grid lg:grid-cols-2 gap-8 py-8">
-            <div className="flex flex-col gap-8">
-                <ChatInterface
-                    onAskQuestion={handleAskQuestion}
-                    onResetChat={handleResetChat}
-                    chatHistory={chatHistory}
-                    translatedChatHistory={translatedChatHistory}
-                    loading={answerLoading}
+    <FontSizeProvider>
+      <div className="min-h-screen bg-slate-900 flex flex-col">
+        <Header 
+          language={language}
+          setLanguage={setLanguage}
+          t={t}
+        />
+        <main className="container mx-auto px-4 sm:px-6 lg:px-8 flex-grow pb-36 lg:pb-8">
+          {/* Desktop Layout */}
+          <div className="hidden lg:grid lg:grid-cols-2 gap-8 py-8">
+              <div className="flex flex-col gap-8">
+                  <ChatInterface
+                      onAskQuestion={handleAskQuestion}
+                      onResetChat={handleResetChat}
+                      chatHistory={chatHistory}
+                      translatedChatHistory={translatedChatHistory}
+                      loading={answerLoading}
+                      t={t}
+                      onNavigateToReference={handleNavigateToReference}
+                      qaTranslated={qaTranslated}
+                      onToggleQaTranslation={handleToggleQaTranslation}
+                      qaTranslationLoading={qaTranslationLoading}
+                      uiLanguage={language}
+                      isMinimized={isChatMinimized}
+                      onToggleMinimize={() => setIsChatMinimized(p => !p)}
+                  />
+                  <BibleSelector
+                    version={version}
+                    setVersion={handleSetVersion}
+                    book={book}
+                    setBook={handleSetBook}
+                    chapter={chapter}
+                    setChapter={handleSetChapter}
                     t={t}
-                    onNavigateToReference={handleNavigateToReference}
-                    qaTranslated={qaTranslated}
-                    onToggleQaTranslation={handleToggleQaTranslation}
-                    qaTranslationLoading={qaTranslationLoading}
-                    uiLanguage={language}
-                    isMinimized={isChatMinimized}
-                    onToggleMinimize={() => setIsChatMinimized(p => !p)}
-                />
-                <BibleSelector
-                  version={version}
-                  setVersion={handleSetVersion}
-                  book={book}
-                  setBook={handleSetBook}
-                  chapter={chapter}
-                  setChapter={handleSetChapter}
-                  t={t}
-                  language={language}
-                  isPulsing={false}
-                  isMinimized={isSelectorMinimized}
-                  onToggleMinimize={() => setIsSelectorMinimized(p => !p)}
-                />
-                <div className="flex-grow min-h-0">
-                    <ChapterDisplay
-                        loading={chapterLoading}
-                        error={chapterError}
-                        content={chapterContent}
-                        displayBookName={displayBookName}
-                        chapter={chapter}
-                        onToggleVerse={handleToggleVerse}
-                        t={t}
-                        highlightedVerses={highlightedVerses}
-                        manuallySelectedVerses={manuallySelectedVerses}
-                        onVerseSelectionToggle={handleVerseSelectionToggle}
-                        verseToScrollTo={verseToScrollTo}
-                        onScrollComplete={handleScrollComplete}
-                        scrollToRef={scrollToRef}
-                        onScrollToRefComplete={onScrollToRefComplete}
-                        viewMode={viewMode}
-                        chapterOutline={chapterOutline[language]}
-                        outlineLoading={outlineLoading}
-                        onSetViewMode={handleSetViewMode}
-                        expandAllLoading={expandAllLoading}
-                        onToggleCommentaryTranslation={handleToggleCommentaryTranslation}
-                        translateCommentaryToggle={translateCommentaryToggle}
-                        translationLoading={translationLoading}
-                        onShowDifference={handleShowDifference}
-                        onCancelGeneration={onCancelGeneration}
-                        uiLanguage={language}
-                        currentVersionName={currentVersionDisplayName}
-                        testament={testament}
-                        onNavigateChapter={handleNavigateChapter}
-                        isPrevDisabled={isPrevDisabled}
-                        isNextDisabled={isNextDisabled}
-                        onToggleThemesModal={handleToggleThemesModal}
-                        onToggleSummaryModal={handleToggleSummaryModal}
-                        onSimplifyVerse={handleSimplifyVerse}
-                        onToggleCrossReferences={handleToggleCrossReferences}
-                        onWordClick={handleWordClick}
-                        isWordDefinitionOpen={wordDefinitionState.isOpen}
-                        onShowCrossRefPopup={handleShowCrossRefPopup}
-                        onHideCrossRefPopup={handleHideCrossRefPopup}
-                        onNavigateToReference={handleNavigateToReference}
-                        onGoToSelector={handleGoToSelector}
-                        isMinimized={isReaderMinimized}
-                        onToggleMinimize={() => setIsReaderMinimized(p => !p)}
-                    />
-                </div>
-            </div>
-            <div className="flex flex-col min-h-0">
-                <SermonEditor
-                    t={t}
-                    isMinimized={isSermonEditorMinimized}
-                    onToggleMinimize={() => setIsSermonEditorMinimized(p => !p)}
-                    sermonType={sermonType}
-                    onSermonTypeChange={setSermonType}
-                    sermonData={sermonData}
-                    generatedOutline={generatedSermonOutline}
-                    isLoading={isSermonLoading}
-                    isClearModalOpen={isSermonClearModalOpen}
-                    onInputChange={handleSermonInputChange}
-                    onBodyItemChange={handleSermonBodyItemChange}
-                    onAddBodyItem={addSermonBodyItem}
-                    onRemoveBodyItem={removeSermonBodyItem}
-                    onMoveBodyItem={moveSermonBodyItem}
-                    onGenerate={handleGenerateSermon}
-                    onClear={() => setIsSermonClearModalOpen(true)}
-                    onConfirmClear={confirmClearSermon}
-                    onCloseClearModal={() => setIsSermonClearModalOpen(false)}
-                    verseExpansionMode={verseExpansionMode}
-                    onVerseExpansionModeChange={setVerseExpansionMode}
-                    onFetchInlineScriptures={handleFetchInlineScriptures}
-                    isSermonColorEnabled={isSermonColorEnabled}
-                    onSermonColorEnabledChange={setIsSermonColorEnabled}
-                />
-            </div>
-        </div>
+                    language={language}
+                    isPulsing={false}
+                    isMinimized={isSelectorMinimized}
+                    onToggleMinimize={() => setIsSelectorMinimized(p => !p)}
+                  />
+                  <div className="flex-grow min-h-0">
+                      <ChapterDisplay
+                          loading={chapterLoading}
+                          error={chapterError}
+                          content={chapterContent}
+                          displayBookName={displayBookName}
+                          chapter={chapter}
+                          onToggleVerse={handleToggleVerse}
+                          t={t}
+                          highlightedVerses={highlightedVerses}
+                          manuallySelectedVerses={manuallySelectedVerses}
+                          onVerseSelectionToggle={handleVerseSelectionToggle}
+                          verseToScrollTo={verseToScrollTo}
+                          onScrollComplete={handleScrollComplete}
+                          scrollToRef={scrollToRef}
+                          onScrollToRefComplete={onScrollToRefComplete}
+                          viewMode={viewMode}
+                          chapterOutline={chapterOutline[language]}
+                          outlineLoading={outlineLoading}
+                          onSetViewMode={handleSetViewMode}
+                          expandAllLoading={expandAllLoading}
+                          onToggleCommentaryTranslation={handleToggleCommentaryTranslation}
+                          translateCommentaryToggle={translateCommentaryToggle}
+                          translationLoading={translationLoading}
+                          onShowDifference={handleShowDifference}
+                          onCancelGeneration={onCancelGeneration}
+                          uiLanguage={language}
+                          currentVersionName={currentVersionDisplayName}
+                          testament={testament}
+                          onNavigateChapter={handleNavigateChapter}
+                          isPrevDisabled={isPrevDisabled}
+                          isNextDisabled={isNextDisabled}
+                          onToggleThemesModal={handleToggleThemesModal}
+                          onToggleSummaryModal={handleToggleSummaryModal}
+                          onSimplifyVerse={handleSimplifyVerse}
+                          onToggleCrossReferences={handleToggleCrossReferences}
+                          onWordClick={handleWordClick}
+                          isWordDefinitionOpen={wordDefinitionState.isOpen}
+                          onShowCrossRefPopup={handleShowCrossRefPopup}
+                          onHideCrossRefPopup={handleHideCrossRefPopup}
+                          onNavigateToReference={handleNavigateToReference}
+                          onGoToSelector={handleGoToSelector}
+                          isMinimized={isReaderMinimized}
+                          onToggleMinimize={() => setIsReaderMinimized(p => !p)}
+                      />
+                  </div>
+              </div>
+              <div className="flex flex-col min-h-0">
+                  <SermonEditor
+                      t={t}
+                      isMinimized={isSermonEditorMinimized}
+                      onToggleMinimize={() => setIsSermonEditorMinimized(p => !p)}
+                      sermonType={sermonType}
+                      onSermonTypeChange={setSermonType}
+                      sermonData={sermonData}
+                      generatedOutline={generatedSermonOutline}
+                      isLoading={isSermonLoading}
+                      isClearModalOpen={isSermonClearModalOpen}
+                      onInputChange={handleSermonInputChange}
+                      onBodyItemChange={handleSermonBodyItemChange}
+                      onAddBodyItem={addSermonBodyItem}
+                      onRemoveBodyItem={removeSermonBodyItem}
+                      onMoveBodyItem={moveSermonBodyItem}
+                      onGenerate={handleGenerateSermon}
+                      onClear={() => setIsSermonClearModalOpen(true)}
+                      onConfirmClear={confirmClearSermon}
+                      onCloseClearModal={() => setIsSermonClearModalOpen(false)}
+                      verseExpansionMode={verseExpansionMode}
+                      onVerseExpansionModeChange={setVerseExpansionMode}
+                      onFetchInlineScriptures={handleFetchInlineScriptures}
+                      isSermonColorEnabled={isSermonColorEnabled}
+                      onSermonColorEnabledChange={setIsSermonColorEnabled}
+                  />
+              </div>
+          </div>
 
-        {/* Mobile Layout */}
-        <div className="lg:hidden h-full overflow-x-hidden">
+          {/* Mobile Layout */}
+          <div className="lg:hidden h-full overflow-x-hidden">
             <div 
               className="flex transition-transform duration-700 ease-in-out h-full"
               style={{ width: '200%', transform: mode === 'sermon' ? 'translateX(-50%)' : 'translateX(0)' }}
@@ -1658,67 +1660,68 @@ const [language, setLanguage] = useState<Language>('pt');
                 </div>
               </div>
             </div>
-        </div>
-      </main>
+          </div>
+        </main>
 
-      <ThemesModal
-        isOpen={isThemesModalOpen}
-        onClose={handleToggleThemesModal}
-        title={t.commonThemesTitle}
-        themes={commonThemes[themesDisplayLanguage]}
-        loading={themesLoading.has(themesDisplayLanguage)}
-        onTranslate={handleTranslateThemes}
-        t={t}
-      />
-
-      <SummaryModal
-        isOpen={isSummaryModalOpen}
-        onClose={handleToggleSummaryModal}
-        title={t.summaryTitle}
-        summary={chapterSummary[summaryDisplayLanguage]}
-        loading={summaryLoading.has(summaryDisplayLanguage)}
-        onTranslate={handleTranslateSummary}
-        t={t}
-        displayBookName={displayBookName}
-        chapter={chapter}
-        currentLanguage={summaryDisplayLanguage}
-      />
-
-      <WordDefinitionPopup
-        state={wordDefinitionState}
-        onClose={handleCloseWordDefinition}
-        onCancel={onCancelGeneration}
-        onRetry={handleRetryWordDefinition}
-        onTranslate={handleTranslateWordDefinition}
-        t={t}
-      />
-
-      <CrossRefPopup
-        state={crossRefPopupState}
-        onNavigate={handleNavigateToReference}
-        onMouseEnter={() => { if (crossRefTimeoutRef.current) clearTimeout(crossRefTimeoutRef.current); }}
-        onMouseLeave={handleHideCrossRefPopup}
-        t={t}
-      />
-
-      <ModeSwitcher
-        mode={mode}
-        setMode={handleSetMode}
-        activePanel={activeSermonPanel}
-        setActivePanel={handlePanelToggle}
-        onScrollToggle={handleScrollToggle}
-        t={t}
-      />
-
-      {manuallySelectedVerses.length > 0 && mode === 'study' && !isReaderMinimized && !chapterLoading && (
-        <SelectionToolbar
-          selectedCount={manuallySelectedVerses.length}
-          onCopy={handleCopySelectedVerses}
-          onClear={handleClearVerseSelection}
+        <ThemesModal
+          isOpen={isThemesModalOpen}
+          onClose={handleToggleThemesModal}
+          title={t.commonThemesTitle}
+          themes={commonThemes[themesDisplayLanguage]}
+          loading={themesLoading.has(themesDisplayLanguage)}
+          onTranslate={handleTranslateThemes}
           t={t}
         />
-      )}
-    </div>
+
+        <SummaryModal
+          isOpen={isSummaryModalOpen}
+          onClose={handleToggleSummaryModal}
+          title={t.summaryTitle}
+          summary={chapterSummary[summaryDisplayLanguage]}
+          loading={summaryLoading.has(summaryDisplayLanguage)}
+          onTranslate={handleTranslateSummary}
+          t={t}
+          displayBookName={displayBookName}
+          chapter={chapter}
+          currentLanguage={summaryDisplayLanguage}
+        />
+
+        <WordDefinitionPopup
+          state={wordDefinitionState}
+          onClose={handleCloseWordDefinition}
+          onCancel={onCancelGeneration}
+          onRetry={handleRetryWordDefinition}
+          onTranslate={handleTranslateWordDefinition}
+          t={t}
+        />
+
+        <CrossRefPopup
+          state={crossRefPopupState}
+          onNavigate={handleNavigateToReference}
+          onMouseEnter={() => { if (crossRefTimeoutRef.current) clearTimeout(crossRefTimeoutRef.current); }}
+          onMouseLeave={handleHideCrossRefPopup}
+          t={t}
+        />
+
+        <ModeSwitcher
+          mode={mode}
+          setMode={handleSetMode}
+          activePanel={activeSermonPanel}
+          setActivePanel={handlePanelToggle}
+          onScrollToggle={handleScrollToggle}
+          t={t}
+        />
+
+        {manuallySelectedVerses.length > 0 && mode === 'study' && !isReaderMinimized && !chapterLoading && (
+          <SelectionToolbar
+            selectedCount={manuallySelectedVerses.length}
+            onCopy={handleCopySelectedVerses}
+            onClear={handleClearVerseSelection}
+            t={t}
+          />
+        )}
+      </div>
+    </FontSizeProvider>
   );
 }
 

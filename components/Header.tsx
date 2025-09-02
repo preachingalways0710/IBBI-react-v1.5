@@ -1,11 +1,41 @@
 import React, { useState } from 'react';
 import { Language, TranslationSet } from '../types';
+import { useFontSize } from '../contexts/FontSizeContext';
 
 interface HeaderProps {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: TranslationSet;
 }
+
+const FontSizeController: React.FC<{ t: TranslationSet }> = ({ t }) => {
+  const { increaseFontSize, decreaseFontSize } = useFontSize();
+  return (
+    <div className="flex items-center border border-slate-600 rounded-md">
+      <button
+        onClick={decreaseFontSize}
+        className="px-2 py-1 text-slate-300 hover:bg-slate-700 rounded-l-md transition-colors"
+        title={t.decreaseFontSize}
+        aria-label={t.decreaseFontSize}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
+        </svg>
+      </button>
+      <span className="px-2 text-xs font-semibold text-slate-400 border-x border-slate-600" title={t.fontSize}>A</span>
+      <button
+        onClick={increaseFontSize}
+        className="px-2 py-1 text-slate-300 hover:bg-slate-700 rounded-r-md transition-colors"
+        title={t.increaseFontSize}
+        aria-label={t.increaseFontSize}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+      </button>
+    </div>
+  );
+};
 
 const USFlag: React.FC<{ className?: string }> = ({ className }) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 100" className={className} aria-label="Flag of the United States">
@@ -86,6 +116,7 @@ const Header: React.FC<HeaderProps> = ({ language, setLanguage, t }) => {
               </button>
             </div>
             <div className="flex items-center space-x-4">
+               <FontSizeController t={t} />
                {/* Show Brazil flag first, then US flag */}
                <button onClick={() => setLanguage('pt')} className={`transition-opacity ${language !== 'pt' ? 'opacity-50 hover:opacity-100' : ''}`} aria-label="Mudar para Português" title={t.tooltipSwitchToPortuguese}>
                   <BrazilFlag className="h-6 w-auto rounded-sm shadow-md border border-slate-600" />
