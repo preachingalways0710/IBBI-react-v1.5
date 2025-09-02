@@ -49,8 +49,10 @@ const stripMarkdown = (text: string): string => {
   text = text.replace(/_(.*?)_/g, '$1');
   // Remove strikethrough (~~text~~)
   text = text.replace(/~~(.*?)~~/g, '$1');
-  // Specifically remove asterisks around verse references (e.g., *Genesis 1:1*, *Psalm 1:1*, *Psalms 1:1*, *Gênesis 1:1*, *Salmos 1:1*)
-  text = text.replace(/\*([A-Za-zÀ-ÿ\s]+ \d+:\d+)\*/gi, '$1');
+  // Specifically remove asterisks around verse references (e.g., *Genesis 1:1*, *3 John 1:1*, *Proverbs 4:20-22*, *Gênesis 1:1*, *3 João 1:1*, *Provérbios 4:20-22*)
+  // Refined for Psalms, numbered books, and ranges
+  text = text.replace(/\*(\d*\s*[A-Za-zÀ-ÿ\s]*Psalm[s]?\s*\d+:\d+(-\d+)?)\*/gi, '$1');
+  text = text.replace(/\*(\d*\s*[A-Za-zÀ-ÿ\s]+ \d+:\d+(-\d+)?)\*/gi, '$1');
   // Trim extra whitespace
   return text.trim();
 };
