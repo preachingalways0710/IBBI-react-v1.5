@@ -219,9 +219,8 @@ const SermonEditor: React.FC<SermonEditorProps> = ({
                 </div>
                 <div className="flex items-center space-x-2">
                     {!isMinimized && (
-                        <button onClick={onClear} title={sb.clearAll} className="flex items-center space-x-2 px-3 py-1.5 bg-red-800/80 text-red-200 rounded-md hover:bg-red-700 transition-colors text-sm font-semibold animate-fade-in">
-                            <TrashIcon className="w-4 h-4"/>
-                            <span>{sb.clearAll}</span>
+                        <button onClick={onClear} title={sb.clearAll} className="p-1 rounded-full bg-red-800/80 text-red-200 hover:bg-red-700 transition-colors animate-fade-in">
+                            <TrashIcon className="w-5 h-5"/>
                         </button>
                     )}
                     <button 
