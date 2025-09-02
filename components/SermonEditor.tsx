@@ -168,13 +168,13 @@ const SermonEditor: React.FC<SermonEditorProps> = ({
             </header>
             <div className="p-6 overflow-y-auto space-y-6">
               <p className="text-slate-300">{sb.help.intro}</p>
-              <ul className="space-y-3 list-none p-0 text-slate-300">
+              <ul className="space-y-4 list-none p-0">
                 {[sb.help.step1, sb.help.step2, sb.help.step3, sb.help.step4].map((step, index) => {
                     const parts = step.split(': ');
                     return (
-                        <li key={index} className="grid grid-cols-[auto_1fr] gap-x-3 items-start">
-                            <span className="text-sky-400 font-bold text-right">{parts[0]}:</span>
-                            <span>{parts.slice(1).join(': ')}</span>
+                        <li key={index}>
+                            <h4 className="font-semibold text-sky-400">{parts[0]}</h4>
+                            <p className="text-slate-300 text-sm mt-1">{parts.slice(1).join(': ')}</p>
                         </li>
                     );
                 })}
