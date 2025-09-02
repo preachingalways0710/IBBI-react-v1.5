@@ -180,7 +180,7 @@ export const translations: { en: TranslationSet; pt: TranslationSet } = {
     chapter: 'Capítulo',
     kjv1769: 'KJV 1769 (Inglês)',
     acf2011: 'ACF 2011 (Português)',
-    acf2007: 'ACF 2007 (Português)',
+    acf2007: 'TBS (português)',
     askAQuestion: 'Faça uma Pergunta',
     thinking: 'Pensando...',
     askToBegin: 'Faça uma pergunta bíblica para obter uma resposta bíblica ou escolha uma passagem específica para estudar, no menu suspenso abaixo.',
