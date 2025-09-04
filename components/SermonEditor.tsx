@@ -324,7 +324,7 @@ const SermonEditor: React.FC<SermonEditorProps> = ({
                                     </div>
                                 ))}
                                 {/* Add Item Buttons */}
-                                <div className="flex flex-wrap items-center gap-2 pt-2">
+                                <div className="flex flex-row sm:flex-col items-center gap-2 pt-2">
                                     <span className="text-sm font-semibold text-slate-400 flex-shrink-0">{sb.addItem}:</span>
                                     <button onClick={() => onAddBodyItem('point')} title={sb.tooltipAddItem(labels.point)} className="flex items-center p-2 bg-slate-700 text-slate-300 rounded-md hover:bg-slate-600 transition-colors"><PointIcon/><span className="hidden sm:inline ml-2">{labels.point}</span></button>
                                     <button onClick={() => onAddBodyItem('scripture')} title={sb.tooltipAddItem(sb.scripture)} className="flex items-center p-2 bg-slate-700 text-slate-300 rounded-md hover:bg-slate-600 transition-colors"><ScriptureIcon/><span className="hidden sm:inline ml-2">{sb.scripture}</span></button>

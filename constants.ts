@@ -283,7 +283,7 @@ export const translations: { en: TranslationSet; pt: TranslationSet } = {
       pointTopical: 'Ponto Principal sobre o Tópico',
       pointExplanation: 'Explicação',
       scripture: 'Escritura(s) de Apoio',
-      illustration: 'Iluminação',
+      illustration: 'Ilustração',
       conclusion: 'Conclusão',
       verdict: 'Veredito (Aplicação, Convite, Apelo)',
       sermonBody: 'Corpo do Sermão',
