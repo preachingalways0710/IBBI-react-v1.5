@@ -1,11 +1,74 @@
 import React, { useState } from 'react';
 import { Language, TranslationSet } from '../types';
+import { useFontSize } from '../contexts/FontSizeContext';
+import ReactDOM from 'react-dom';
 
 interface HeaderProps {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: TranslationSet;
 }
+
+const FontSizeButton: React.FC<{ t: TranslationSet }> = ({ t }) => {
+  const { currentFontSize, setFontSize } = useFontSize();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const fontSizes = [12, 14, 16, 18, 20, 22, 24]; // Seven sizes: three smaller, default, three larger
+
+  const handleFontSizeSelect = (size: number) => {
+    setFontSize(size);
+    setIsModalOpen(false);
+  };
+
+  const modalRoot = document.getElementById('modal-root');
+
+  const fontSizeModal = isModalOpen && modalRoot ? ReactDOM.createPortal(
+    <div 
+      className="fixed inset-0 bg-black bg-opacity-70 z-50 flex justify-center items-center p-4 animate-fade-in"
+      onClick={() => setIsModalOpen(false)}
+    >
+      <div 
+        className="bg-slate-800 rounded-lg shadow-2xl w-32 p-4 border border-slate-700 flex flex-col items-center space-y-2"
+        onClick={e => e.stopPropagation()}
+      >
+        <h3 className="text-sm font-semibold text-amber-400 mb-2">{t.fontSize}</h3>
+        {fontSizes.map(size => (
+          <button
+            key={size}
+            onClick={() => handleFontSizeSelect(size)}
+            className={`w-full py-2 px-4 rounded-md transition-colors ${
+              currentFontSize === size
+                ? 'bg-amber-500 text-slate-900'
+                : 'text-amber-400 hover:bg-slate-700'
+            }`}
+            style={{ fontSize: `${size}px` }}
+            title={`${size}px`}
+          >
+            A
+          </button>
+        ))}
+      </div>
+    </div>,
+    modalRoot
+  ) : null;
+
+  return (
+    <>
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="px-2 py-1 text-slate-300 hover:bg-slate-700 rounded-md transition-colors flex items-center space-x-2"
+        title={t.fontSize}
+        aria-label={t.fontSize}
+      >
+        <span className="flex items-baseline space-x-1">
+          <span className="text-xs text-slate-400">A</span>
+          <span className="text-sm text-slate-400">A</span>
+        </span>
+      </button>
+      {fontSizeModal}
+    </>
+  );
+};
 
 const USFlag: React.FC<{ className?: string }> = ({ className }) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 100" className={className} aria-label="Flag of the United States">
@@ -75,8 +138,8 @@ const Header: React.FC<HeaderProps> = ({ language, setLanguage, t }) => {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                  <path d="M6.5 2H20v15H6.5A2.5 2.5 0 0 1 4 14.5V4.5A2.5 2.5 0 0 1 6.5 2z"/>
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H8"/>
+                  <path d="M17.5 2H4v15h13.5a2.5 2.5 0 0 0 2.5-2.5V4.5A2.5 2.5 0 0 0 17.5 2z"/>
               </svg>
               <h1 className="text-xl font-bold text-slate-100">
                 {t.studyBible}
@@ -86,6 +149,7 @@ const Header: React.FC<HeaderProps> = ({ language, setLanguage, t }) => {
               </button>
             </div>
             <div className="flex items-center space-x-4">
+               <FontSizeButton t={t} />
                {/* Show Brazil flag first, then US flag */}
                <button onClick={() => setLanguage('pt')} className={`transition-opacity ${language !== 'pt' ? 'opacity-50 hover:opacity-100' : ''}`} aria-label="Mudar para Português" title={t.tooltipSwitchToPortuguese}>
                   <BrazilFlag className="h-6 w-auto rounded-sm shadow-md border border-slate-600" />
@@ -104,7 +168,7 @@ const Header: React.FC<HeaderProps> = ({ language, setLanguage, t }) => {
           onClick={() => setIsAboutModalOpen(false)}
         >
           <div 
-            className="bg-slate-800 rounded-lg shadow-2xl w-full max-w-lg border border-slate-700"
+            className="bg-slate-800 rounded-lg shadow-2xl w-full max-w-lg border border-slate-700 flex flex-col max-h-[90vh]"
             onClick={e => e.stopPropagation()}
           >
             <header className="flex justify-between items-center p-4 border-b border-slate-700">
@@ -117,7 +181,7 @@ const Header: React.FC<HeaderProps> = ({ language, setLanguage, t }) => {
                 <CloseIcon className="w-6 h-6" />
               </button>
             </header>
-            <div className="p-6">
+            <div className="p-6 overflow-y-auto">
               <p className="text-slate-300">
                 {t.aboutContentPart1}
                 <a href="https://meuibbi.com" target="_blank" rel="noopener noreferrer" className="text-sky-400 hover:underline">

@@ -33,6 +33,29 @@ const MaximizeIcon: React.FC<{ className?: string }> = ({ className }) => (
     </svg>
 );
 
+// Update the utility function to remove asterisks around verse references
+const stripMarkdown = (text: string): string => {
+  // Remove bold (**text**)
+  text = text.replace(/\*\*(.*?)\*\*/g, '$1');
+  // Remove italic (*text*)
+  text = text.replace(/\*(.*?)\*/g, '$1');
+  // Remove inline code (`code`)
+  text = text.replace(/`(.*?)`/g, '$1');
+  // Remove links ([text](url))
+  text = text.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1');
+  // Remove headers (# ## ###)
+  text = text.replace(/^#+\s*/gm, '');
+  // Remove emphasis (_text_)
+  text = text.replace(/_(.*?)_/g, '$1');
+  // Remove strikethrough (~~text~~)
+  text = text.replace(/~~(.*?)~~/g, '$1');
+  // Specifically remove asterisks around verse references (e.g., *Genesis 1:1*, *3 John 1:1*, *Proverbs 4:20-22*, *Gênesis 1:1*, *3 João 1:1*, *Provérbios 4:20-22*)
+  // Refined for Psalms, numbered books, and ranges
+  text = text.replace(/\*(\d*\s*[A-Za-zÀ-ÿ\s]*Psalm[s]?\s*\d+:\d+(-\d+)?)\*/gi, '$1');
+  text = text.replace(/\*(\d*\s*[A-Za-zÀ-ÿ\s]+ \d+:\d+(-\d+)?)\*/gi, '$1');
+  // Trim extra whitespace
+  return text.trim();
+};
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ 
   onAskQuestion, 
@@ -52,6 +75,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 }) => {
   const [question, setQuestion] = useState('');
   const lastMessageRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null); // New ref for the header
+  const contentRef = useRef<HTMLDivElement>(null); // New ref for the scrollable content area
 
   const historyToDisplay = qaTranslated && translatedChatHistory.length === chatHistory.length
     ? translatedChatHistory
@@ -60,8 +85,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const hasContent = chatHistory.length > 0;
 
   useEffect(() => {
-    if ((!isMinimized || isFloating) && lastMessageRef.current) {
-      lastMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Scroll the content area to bring the last message to the top
+    if ((!isMinimized || isFloating) && contentRef.current && lastMessageRef.current && historyToDisplay.length > 0) {
+      const content = contentRef.current;
+      const target = lastMessageRef.current;
+      const contentRect = content.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const scrollTop = content.scrollTop + (targetRect.top - contentRect.top);
+      content.scrollTo({ top: scrollTop, behavior: 'smooth' });
     }
   }, [historyToDisplay.length, isMinimized, isFloating]);
 
@@ -71,6 +102,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     if (question.trim() && !loading) {
       onAskQuestion(question);
       setQuestion('');
+      // Scroll to the header after submission, accounting for the sticky app header
+      if (headerRef.current && !isMinimized && !isFloating) {
+        const rect = headerRef.current.getBoundingClientRect();
+        const appHeaderHeight = 64; // Height of the sticky app header (h-16 = 64px)
+        const offset = 10; // Slight gap below the app header
+        const scrollTop = window.pageYOffset + rect.top - appHeaderHeight - offset;
+        window.scrollTo({ top: scrollTop, behavior: 'smooth' });
+      }
+      // Removed: Internal scroll logic (now handled by useEffect)
     }
   };
 
@@ -94,13 +134,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   
   const mainContainerClass = isFloating 
     ? 'flex flex-col overflow-hidden h-full' 
-    : `bg-slate-800 rounded-lg shadow-md flex flex-col transition-all duration-500 ease-in-out ${isMinimized ? 'max-h-16 overflow-hidden' : 'max-h-[45vh]'}`;
+    : `bg-slate-800 rounded-lg shadow-md flex flex-col transition-all duration-500 ease-in-out ${isMinimized ? 'max-h-16 overflow-hidden' : 'max-h-[75vh] md:max-h-[45vh]'}`;
 
 
   return (
     <div className={mainContainerClass}>
         {!isFloating && (
           <div 
+            ref={headerRef} // Attach the ref to the header
             className={`p-4 border-b border-slate-700 flex justify-between items-center flex-shrink-0 ${isMinimized ? 'border-b-transparent cursor-pointer h-full' : ''}`}
             onClick={isMinimized ? onToggleMinimize : undefined}
           >
@@ -140,7 +181,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       
       {(!isMinimized || isFloating) && (
         <>
-          <div className={`p-6 flex-grow overflow-y-auto`}>
+          <div 
+            ref={contentRef} // Attach the ref to the scrollable content area
+            className={`p-6 flex-grow overflow-y-auto`}
+          >
             {hasContent ? (
               <div className="space-y-6">
                 {historyToDisplay.map((turn, index) => {
@@ -162,7 +206,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                          </div>
                       ) : (
                         <div className="prose prose-invert prose-p:text-slate-300 prose-headings:text-slate-100 whitespace-pre-wrap leading-relaxed">
-                          <AnswerRenderer text={turn.answer} onNavigate={onNavigateToReference} />
+                          <AnswerRenderer text={stripMarkdown(turn.answer)} onNavigate={onNavigateToReference} />
                         </div>
                       )}
                     </div>

@@ -15,13 +15,9 @@ interface ModeSwitcherProps {
 
 // Icons
 const StudyIcon = ({ className = "w-6 h-6" }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
-    <rect x="3" y="4" width="18" height="16" rx="2" fill="#fff" stroke="#222" strokeWidth="2"/>
-    <path d="M7 4v16M17 4v16" stroke="#222" strokeWidth="1.5"/>
-    <path d="M3 8h18" stroke="#222" strokeWidth="1"/>
-    <rect x="7" y="7" width="10" height="2" rx="0.5" fill="#e2c97b"/>
-    <rect x="7" y="11" width="10" height="1.5" rx="0.5" fill="#e2c97b"/>
-    <rect x="7" y="14" width="10" height="1.5" rx="0.5" fill="#e2c97b"/>
+  <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H8"/>
+    <path d="M17.5 2H4v15h13.5a2.5 2.5 0 0 0 2.5-2.5V4.5A2.5 2.5 0 0 0 17.5 2z"/>
   </svg>
 );
 const SermonIcon = ({ className = "w-6 h-6" }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>;
@@ -42,7 +38,7 @@ const ModeSwitcher: React.FC<ModeSwitcherProps> = ({ mode, setMode, activePanel,
   };
 
   return (
-    <footer className="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/80 backdrop-blur-sm border-t border-slate-700/50">
+    <footer className="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/80 backdrop-blur-sm border-t border-slate-700/50 lg:hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
         {mode === 'sermon' && (
           <div className="flex items-center space-x-4 py-2 animate-fade-in-up">

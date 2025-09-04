@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --base-font-size: 16px; /* Default value, will be overridden by JS */
+}
+
+html {
+  font-size: var(--base-font-size);
+}
