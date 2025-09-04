@@ -1,0 +1,1 @@
+@tailwind base;@tailwind components;@tailwind utilities;:root{--base-font-size: 16px}html{font-size:var(--base-font-size)}
